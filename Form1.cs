@@ -63,7 +63,7 @@ namespace Beatmap_Guesser
 
         private void renderImage()
         {
-            Image image = this.currentSong.getImage();//throws an error fuck me
+            Image image = this.currentSong.getImage();//throws an error 
 
             pictureBox1.Image = image;
             pictureBox1.Height = image.Height;

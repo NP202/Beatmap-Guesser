@@ -107,9 +107,6 @@ namespace Beatmap_Guesser
                 foreach (string dotOsuPath in dotOsuPaths)
                 {
 
-                    //this SHOULD grab the background shit, dont know if takes the quotes though.
-                    //string backgroundPath = File.ReadLines(dotOsuPath).SkipWhile(line => !line.Contains(",\"")).TakeWhile(line => !line.Contains("\",")).ToString();
-
                     Boolean bgFound = false;
 
                     string backgroundPath = "";
@@ -147,12 +144,12 @@ namespace Beatmap_Guesser
 
             try
             {
-                temp = File.ReadLines(dotOsuPaths[0]);//regular non-dogshit folder
+                temp = File.ReadLines(dotOsuPaths[0]);//regular folder
                
             }
             catch (Exception ex)
             {
-                var temp_path = Directory.GetDirectories(path);//dogshit folder, requires me to delve one subfolder deeper in order to access .osu's
+                var temp_path = Directory.GetDirectories(path);//layered folder, requires me to delve one subfolder deeper in order to access .osu's
                 temp = Directory.GetFiles(path, "*.osu");
             }
 
@@ -178,12 +175,12 @@ namespace Beatmap_Guesser
 
             try
             {
-                temp = File.ReadLines(dotOsuPaths[0]);//regular non-dogshit folder
+                temp = File.ReadLines(dotOsuPaths[0]);//regular folder
 
             }
             catch (Exception ex)
             {
-                var temp_path = Directory.GetDirectories(path);//dogshit folder, requires me to delve one subfolder deeper in order to access .osu's
+                var temp_path = Directory.GetDirectories(path);//layered folder, requires me to delve one subfolder deeper in order to access .osu's
                 temp = Directory.GetFiles(path, "*.osu");
             }
 
