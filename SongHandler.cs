@@ -12,7 +12,9 @@ namespace Beatmap_Guesser
     public class SongHandler
 
     {
-        private const int MAX_SONGS = 100;
+        private const int MAX_SONGS = 500;
+        public static string current_path { get; set; }
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG" };
         public SongHandler()
         {
 
@@ -21,38 +23,44 @@ namespace Beatmap_Guesser
         public ArrayList createSongs(string[] list_of_beatmap_paths)
         {
             ArrayList songs = new ArrayList();
-
+            Dupe:
             foreach (string beatmap_path in selectRandom(list_of_beatmap_paths))
             {
+                SongHandler.current_path = beatmap_path;
                 Song newSong = new Song(grabImageFromSongFolder(beatmap_path), getSongTitle(beatmap_path), getSongArtist(beatmap_path));
                 bool isDupe = false;
 
                 int count = songs.Count;
 
+                if (newSong.imagePath == null)
+                {
+                    isDupe = true;
+
+                }
+
                 for (int i = 0; i < count && count <= songs.Count; i++)//logic: we are generated up to songs.Count assuming no errors, but we have to increment this variable each time an error is encountered
                 {
+                    if (songs.Count == MAX_SONGS) return songs;
+
                     if (((Song)songs[i]).imagePath == newSong.imagePath)//successfully checks for duplicates
                     {
-                        isDupe = true; 
+                        count++;
+                        isDupe = true;
+                        
                     }
 
-                    if (newSong.imagePath == null)//no valid bg
-                    {//given that the song doesn't have a valid background
-                        string[] temp = selectRandom(list_of_beatmap_paths);
-                        list_of_beatmap_paths = temp;//re-randomize selection so that we don't end up short or out of bounds
-                        count++; //so loop doesn't exit prematurely
-                        Console.WriteLine("HIT NULL IMAGEPATH");
-                        int index = Array.IndexOf(list_of_beatmap_paths, newSong);
-                        //beatmap_path = selectRandomSingle(list_of_beatmap_paths)[0];
-                        list_of_beatmap_paths[index] = selectRandomSingle(list_of_beatmap_paths)[0];
-                    }
-                    Console.WriteLine("CURRENT COUNT: " + count);
                 }
 
                 if (!isDupe)
                 {
+                    Console.WriteLine("CURRENT COUNT: " + count);
                     songs.Add(newSong);
                     Console.WriteLine("NEW Song added! Image path: " + newSong.imagePath);
+                }
+                else
+                {
+                    if (songs.Count == MAX_SONGS) return songs;
+                    goto Dupe;
                 }
             }
 
@@ -99,13 +107,15 @@ namespace Beatmap_Guesser
             ArrayList dotOsuPaths = new ArrayList();
             dotOsuPaths.AddRange(temp);//now an array list
 
-            string imagePath = "DEFAULT DANCE";
+            string imagePath = null;
 
             if (dotOsuPaths.Count > 0)
             {
 
                 foreach (string dotOsuPath in dotOsuPaths)
                 {
+
+                    if (File.ReadAllLines(dotOsuPath).Length <= 1) return null;//checks if we have an empty .osu file
 
                     Boolean bgFound = false;
 
@@ -118,7 +128,8 @@ namespace Beatmap_Guesser
                             backgroundPath = Regex.Matches(line, "\"([^\"]*)\"").OfType<Match>().Select(m => m.Groups[0].Value).ToArray()[0];  //this eliminates the "0,0," surrounding the path
                             bgFound = true;
                         }
-
+                        //if we hit end of file
+                        //return null
                     }
 
                     string newStr = backgroundPath.Replace("\"", "");//make sure that no quotes are trying to be added to path
@@ -166,8 +177,19 @@ namespace Beatmap_Guesser
             }
             return artist;
         }
+        
+        public static Image getSafetyImage(string song_directory)
+        {
+            foreach (string filename in Directory.GetFiles(song_directory)){//for each file in the song folder
+                if (ImageExtensions.Contains(Path.GetExtension(filename).ToUpperInvariant())) { //checks the path against the list of appropriate file extensions
+                    return getSafetyImage(filename);
+                }
+            }
 
-        public string getSongTitle(string path)
+            return null;//no image file was found
+        }
+
+    public string getSongTitle(string path)
         {
             string[] dotOsuPaths = Directory.GetFiles(path, "*.osu");//Errors when there are another identical parent folder to go through
             string title = "";

@@ -46,24 +46,30 @@ namespace Beatmap_Guesser
             this.Controls.Add(answerBox);
             this.Controls.Add(textBox2);
             //this.Controls.Add(filepathForm);
-            try
-            //if null, skip to next song
-            {
-                renderImage();
-            }
-            catch (Exception ex)
-            {
-                Song newCurrent = (Song)this.songList[this.songList.IndexOf(this.currentSong)+1];
-                this.currentSong = newCurrent;//skip current image, render next THIS DOES NOT CHANGE THE DATA DISPLAYED
 
-                renderImage();//render new image
-            }
+                
+                if (this.currentSong.imagePath != null)
+                {
+                    renderImage();
+                }
+                else
+                {
+                    Song newCurrent = (Song)this.songList[this.songList.IndexOf(this.currentSong) + 1];
+                    this.currentSong = newCurrent;//skip current image, render next THIS DOES NOT CHANGE THE DATA DISPLAYED
 
+                    renderImage();//render new image
+                }
+  
         }
 
         private void renderImage()
         {
-            Image image = this.currentSong.getImage();//throws an error 
+
+            Image image = null;
+
+            image = this.currentSong.getImage();
+            
+            if (image == null) image = SongHandler.getSafetyImage(SongHandler.current_path);//catch bad image, will still error if NO IMAGES IN SONG FOLDER
 
             pictureBox1.Image = image;
             pictureBox1.Height = image.Height;
