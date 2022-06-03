@@ -24,13 +24,14 @@ namespace Beatmap_Guesser
         public FilepathForm filepathForm = new FilepathForm();
 
         public bool buttonFlag { get; set; } = false;
-        public int currentSongIndex { get; set; } = 0;  
+        public int currentSongIndex { get; set; } = 0;
+        public string difficulty { get; set; }
 
-        public GameDisplay()
+        public GameDisplay(string difficulty)
         {
 
             InitializeComponent();
-
+            this.difficulty = difficulty;
             Load += Form1_Load1;
             Shown += Form1_Shown1;
           
@@ -45,8 +46,6 @@ namespace Beatmap_Guesser
             this.Controls.Add(pictureBox1);
             this.Controls.Add(answerBox);
             this.Controls.Add(textBox2);
-            //this.Controls.Add(filepathForm);
-
                 
                 if (this.currentSong.imagePath != null)
                 {
@@ -101,7 +100,7 @@ namespace Beatmap_Guesser
             this.buttonFlag = true;
 
             validateGuess(this.currentSong, this.currentGuess);
-            Console.WriteLine(this.guessMessage);
+            MessageBox.Show(this.guessMessage);//display round results to user
 
             currentSongIndex++;
             try
@@ -156,7 +155,7 @@ namespace Beatmap_Guesser
 
             this.guessMessage = "Error during guess validation.";
 
-            int guessDistance = GetDamerauLevenshteinDistance(currentSong.song_name, guess);
+            int guessDistance = GetStringDistance(currentSong.song_name, guess);
 
             if (guessDistance >= 0 && guessDistance <= 5)
             {
@@ -180,7 +179,7 @@ namespace Beatmap_Guesser
 
         }
 
-        public static int GetDamerauLevenshteinDistance(string s, string t)
+        public static int GetStringDistance(string s, string t)
         {
             var bounds = new { Height = s.Length + 1, Width = t.Length + 1 };
 

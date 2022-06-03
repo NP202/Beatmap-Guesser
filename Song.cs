@@ -31,7 +31,7 @@ namespace Beatmap_Guesser {
 			catch (Exception e)
 			{
 				this.imagePath = null;
-				return null; //no idea what to do here really
+				return null;
 			}
         }
 	}

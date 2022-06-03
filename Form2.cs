@@ -30,7 +30,7 @@ namespace Beatmap_Guesser
 
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
         {
-
+            MessageBox.Show("If you can't find your Songs folder, it's likely in D:\\osu\\Songs or a similar directory!");
         }
     }
 }

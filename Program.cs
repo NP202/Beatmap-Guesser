@@ -11,8 +11,8 @@ namespace Beatmap_Guesser {
         [STAThread]
         static void Main(string[] args)
         {
-            GameDisplay game = new GameDisplay();
-            game.start();
+
+            Application.Run(new HomeScreen());
         }
         
 
