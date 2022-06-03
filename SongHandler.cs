@@ -12,7 +12,7 @@ namespace Beatmap_Guesser
     public class SongHandler
 
     {
-        private const int MAX_SONGS = 50;
+        private const int MAX_SONGS = 10;
         public static string current_path { get; set; }
         public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG" };
         public SongHandler()

@@ -110,7 +110,10 @@ namespace Beatmap_Guesser
             catch (Exception ex)
             {
                 Console.WriteLine("The game has ended.");
-                Application.Exit();
+                HomeScreen hs = new HomeScreen();
+                hs.ShowDialog();
+                this.Dispose();
+
             }
             renderImage();
 
@@ -142,7 +145,7 @@ namespace Beatmap_Guesser
 
                     this.ShowDialog();
 
-                    while (true)
+                    while (true)//necessary for form to stay open
                     {
 
                     }
@@ -161,7 +164,7 @@ namespace Beatmap_Guesser
             {
                 if (guessDistance == 0)
                 {
-                    this.guessMessage = "Perfect! You were spot on with " + guess + ".";
+                    this.guessMessage = "Perfect! You were spot on with " + currentSong.song_name + ".";
                     this.correctCount++;
                 }
                 else
@@ -181,7 +184,10 @@ namespace Beatmap_Guesser
 
         public static int GetStringDistance(string s, string t)
         {
-            var bounds = new { Height = s.Length + 1, Width = t.Length + 1 };
+            string s_lower = s.ToLower();
+            string t_lower = t.ToLower();
+
+            var bounds = new { Height = s_lower.Length + 1, Width = t_lower.Length + 1 };
 
             int[,] matrix = new int[bounds.Height, bounds.Width];
 
@@ -192,14 +198,14 @@ namespace Beatmap_Guesser
             {
                 for (int width = 1; width < bounds.Width; width++)
                 {
-                    int cost = (s[height - 1] == t[width - 1]) ? 0 : 1;
+                    int cost = (s_lower[height - 1] == t_lower[width - 1]) ? 0 : 1;
                     int insertion = matrix[height, width - 1] + 1;
                     int deletion = matrix[height - 1, width] + 1;
                     int substitution = matrix[height - 1, width - 1] + cost;
 
                     int distance = Math.Min(insertion, Math.Min(deletion, substitution));
 
-                    if (height > 1 && width > 1 && s[height - 1] == t[width - 2] && s[height - 2] == t[width - 1])
+                    if (height > 1 && width > 1 && s_lower[height - 1] == t_lower[width - 2] && s_lower[height - 2] == t_lower[width - 1])
                     {
                         distance = Math.Min(distance, matrix[height - 2, width - 2] + cost);
                     }

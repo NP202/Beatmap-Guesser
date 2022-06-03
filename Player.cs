@@ -35,14 +35,5 @@ namespace Beatmap_Guesser
 			return new Player();
         }
 
-
-
-
-
-
-
-
-
-
 	}
 }

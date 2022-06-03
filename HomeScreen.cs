@@ -32,32 +32,34 @@ namespace Beatmap_Guesser
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
-            gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
-
-            if (gameDisplay.difficulty != "Easy" || gameDisplay.difficulty != "Normal" || gameDisplay.difficulty != "Hard")
+  
+            if (comboBox1.SelectedItem == null)
             {
                 MessageBox.Show("No difficulty selected! Please select a difficulty and try again.");
             }
             else
             {
-                gameDisplay.Show();
-                Console.WriteLine("Selected Difficulty: " + gameDisplay.difficulty);
+                Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
+                gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
+                gameDisplay.start();
+                this.Dispose();
+               
             }
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
-            gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
 
-            if (gameDisplay.difficulty != "Easy" || gameDisplay.difficulty != "Normal" || gameDisplay.difficulty != "Hard")
+            if (comboBox1.SelectedItem == null)
             {
                 MessageBox.Show("No difficulty selected! Please select a difficulty and try again.");
             }
             else
             {
-                gameDisplay.Show();
-                Console.WriteLine("Selected Difficulty: " + gameDisplay.difficulty);
+                Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
+                gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
+                gameDisplay.start();
+                this.Dispose();
+               
             }
 
         }
