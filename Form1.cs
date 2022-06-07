@@ -19,6 +19,7 @@ namespace Beatmap_Guesser
         public string guessMessage { get; private set; }
         public Song currentSong { get;  set; }
         public int correctCount { get; private set; }
+        public int totalCount { get; private set; }
         public ArrayList songList { get; private set; }
 
         public FilepathForm filepathForm = new FilepathForm();
@@ -26,8 +27,9 @@ namespace Beatmap_Guesser
         public bool buttonFlag { get; set; } = false;
         public int currentSongIndex { get; set; } = 0;
         public string difficulty { get; set; }
-
-        public GameDisplay(string difficulty)
+        public Player player { get; private set; }
+   
+        public GameDisplay(string difficulty, Player player)
         {
 
             InitializeComponent();
@@ -111,8 +113,11 @@ namespace Beatmap_Guesser
             {
                 Console.WriteLine("The game has ended.");
                 HomeScreen hs = new HomeScreen();
+                //player.TotalGuessed += this.totalCount;
+                //player.CorrectlyGuessed += this.correctCount;
+                this.Hide();
                 hs.ShowDialog();
-                this.Dispose();
+                this.Close();
 
             }
             renderImage();
@@ -179,7 +184,7 @@ namespace Beatmap_Guesser
                 this.guessMessage = "Not quite! The correct answer was " + currentSong.song_name + ".";
                 return false;
             }
-
+            this.totalCount++;
         }
 
         public static int GetStringDistance(string s, string t)
