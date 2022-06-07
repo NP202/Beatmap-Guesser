@@ -12,7 +12,7 @@ namespace Beatmap_Guesser
     public class SongHandler
 
     {
-        private const int MAX_SONGS = 500;
+        private const int MAX_SONGS = 10;
         public static string current_path { get; set; }
         public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".BMP", ".GIF", ".PNG" };
         public SongHandler()
@@ -26,7 +26,7 @@ namespace Beatmap_Guesser
             Dupe:
             foreach (string beatmap_path in selectRandom(list_of_beatmap_paths))
             {
-                SongHandler.current_path = beatmap_path;
+                current_path = beatmap_path;
                 Song newSong = new Song(grabImageFromSongFolder(beatmap_path), getSongTitle(beatmap_path), getSongArtist(beatmap_path));
                 bool isDupe = false;
 
@@ -160,7 +160,7 @@ namespace Beatmap_Guesser
             }
             catch (Exception ex)
             {
-                var temp_path = Directory.GetDirectories(path);//layered folder, requires me to delve one subfolder deeper in order to access .osu's
+
                 temp = Directory.GetFiles(path, "*.osu");
             }
 
@@ -182,7 +182,7 @@ namespace Beatmap_Guesser
         {
             foreach (string filename in Directory.GetFiles(song_directory)){//for each file in the song folder
                 if (ImageExtensions.Contains(Path.GetExtension(filename).ToUpperInvariant())) { //checks the path against the list of appropriate file extensions
-                    return getSafetyImage(filename);
+                    return Image.FromFile(filename);
                 }
             }
 

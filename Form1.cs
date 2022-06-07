@@ -19,18 +19,21 @@ namespace Beatmap_Guesser
         public string guessMessage { get; private set; }
         public Song currentSong { get;  set; }
         public int correctCount { get; private set; }
+        public int totalCount { get; private set; }
         public ArrayList songList { get; private set; }
 
         public FilepathForm filepathForm = new FilepathForm();
 
         public bool buttonFlag { get; set; } = false;
-        public int currentSongIndex { get; set; } = 0;  
-
-        public GameDisplay()
+        public int currentSongIndex { get; set; } = 0;
+        public string difficulty { get; set; }
+        public Player player { get; private set; }
+   
+        public GameDisplay(string difficulty, Player player)
         {
 
             InitializeComponent();
-
+            this.difficulty = difficulty;
             Load += Form1_Load1;
             Shown += Form1_Shown1;
           
@@ -45,8 +48,6 @@ namespace Beatmap_Guesser
             this.Controls.Add(pictureBox1);
             this.Controls.Add(answerBox);
             this.Controls.Add(textBox2);
-            //this.Controls.Add(filepathForm);
-
                 
                 if (this.currentSong.imagePath != null)
                 {
@@ -101,7 +102,7 @@ namespace Beatmap_Guesser
             this.buttonFlag = true;
 
             validateGuess(this.currentSong, this.currentGuess);
-            Console.WriteLine(this.guessMessage);
+            MessageBox.Show(this.guessMessage);//display round results to user
 
             currentSongIndex++;
             try
@@ -111,7 +112,13 @@ namespace Beatmap_Guesser
             catch (Exception ex)
             {
                 Console.WriteLine("The game has ended.");
-                Application.Exit();
+                HomeScreen hs = new HomeScreen();
+                //player.TotalGuessed += this.totalCount;
+                //player.CorrectlyGuessed += this.correctCount;
+                this.Hide();
+                hs.ShowDialog();
+                this.Close();
+
             }
             renderImage();
 
@@ -143,7 +150,7 @@ namespace Beatmap_Guesser
 
                     this.ShowDialog();
 
-                    while (true)
+                    while (true)//necessary for form to stay open
                     {
 
                     }
@@ -156,13 +163,13 @@ namespace Beatmap_Guesser
 
             this.guessMessage = "Error during guess validation.";
 
-            int guessDistance = GetDamerauLevenshteinDistance(currentSong.song_name, guess);
+            int guessDistance = GetStringDistance(currentSong.song_name, guess);
 
             if (guessDistance >= 0 && guessDistance <= 5)
             {
                 if (guessDistance == 0)
                 {
-                    this.guessMessage = "Perfect! You were spot on with " + guess + ".";
+                    this.guessMessage = "Perfect! You were spot on with " + currentSong.song_name + ".";
                     this.correctCount++;
                 }
                 else
@@ -177,12 +184,15 @@ namespace Beatmap_Guesser
                 this.guessMessage = "Not quite! The correct answer was " + currentSong.song_name + ".";
                 return false;
             }
-
+            this.totalCount++;
         }
 
-        public static int GetDamerauLevenshteinDistance(string s, string t)
+        public static int GetStringDistance(string s, string t)
         {
-            var bounds = new { Height = s.Length + 1, Width = t.Length + 1 };
+            string s_lower = s.ToLower();
+            string t_lower = t.ToLower();
+
+            var bounds = new { Height = s_lower.Length + 1, Width = t_lower.Length + 1 };
 
             int[,] matrix = new int[bounds.Height, bounds.Width];
 
@@ -193,14 +203,14 @@ namespace Beatmap_Guesser
             {
                 for (int width = 1; width < bounds.Width; width++)
                 {
-                    int cost = (s[height - 1] == t[width - 1]) ? 0 : 1;
+                    int cost = (s_lower[height - 1] == t_lower[width - 1]) ? 0 : 1;
                     int insertion = matrix[height, width - 1] + 1;
                     int deletion = matrix[height - 1, width] + 1;
                     int substitution = matrix[height - 1, width - 1] + cost;
 
                     int distance = Math.Min(insertion, Math.Min(deletion, substitution));
 
-                    if (height > 1 && width > 1 && s[height - 1] == t[width - 2] && s[height - 2] == t[width - 1])
+                    if (height > 1 && width > 1 && s_lower[height - 1] == t_lower[width - 2] && s_lower[height - 2] == t_lower[width - 1])
                     {
                         distance = Math.Min(distance, matrix[height - 2, width - 2] + cost);
                     }

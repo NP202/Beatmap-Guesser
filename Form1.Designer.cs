@@ -64,9 +64,9 @@
             this.pictureBox1.MaximumSize = new System.Drawing.Size(1200, 600);
             this.pictureBox1.MinimumSize = new System.Drawing.Size(256, 256);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Padding = new System.Windows.Forms.Padding(222);
-            this.pictureBox1.Size = new System.Drawing.Size(800, 450);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.pictureBox1.Size = new System.Drawing.Size(1200, 600);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
@@ -86,10 +86,12 @@
             // 
             // textBox2
             // 
+            this.textBox2.Enabled = false;
             this.textBox2.Location = new System.Drawing.Point(867, 604);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(386, 20);
             this.textBox2.TabIndex = 3;
+            this.textBox2.Visible = false;
             // 
             // GameDisplay
             // 
