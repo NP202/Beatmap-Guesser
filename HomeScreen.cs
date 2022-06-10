@@ -39,14 +39,18 @@ namespace Beatmap_Guesser
             }
             else
             {
-                //show username and password form
-                //login
-                Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
-                gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
-                this.Hide();
-                gameDisplay.start();
-                this.Close();
-               
+                LoginForm loginForm = new LoginForm();
+                loginForm.ShowDialog();
+                bool login_response = loginForm.verifyLogin();
+
+                if (login_response)//successful login
+                {
+                    Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
+                    gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
+                    this.Hide();
+                    gameDisplay.start();
+                    this.Close();
+                }
             }
         }
         private void button2_Click(object sender, EventArgs e)

@@ -15,7 +15,7 @@ namespace Beatmap_Guesser
 		private string Name { get; set; }
 		public int TotalGuessed { get; set; }
 		public int CorrectlyGuessed { get; set; }
-
+		public string password { get; set; }	
 
 		public Player()
 		{
@@ -30,13 +30,13 @@ namespace Beatmap_Guesser
 			this.CorrectlyGuessed = 0;
 		}
 
-		public Player retrievePlayer(string name)
+		public static Player retrievePlayer(string name)
 		{
 
 			System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Player));
 			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "//osu! Beatmap Guesser";
 			string file_path = "//" + name + ".xml";
-			string full_filepath = dir_path + file_path;
+			string full_filepath = Path.Combine(dir_path, file_path);
 
 			
             StreamReader file = new StreamReader(full_filepath);
