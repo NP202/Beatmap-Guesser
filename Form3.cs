@@ -50,24 +50,29 @@ namespace Beatmap_Guesser
         {
             verifyLogin();
         }
-
+        bool new_user = false;
+   
         public bool verifyLogin()
         {
-
-            var pw = password;
-            string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "//osu! Beatmap Guesser";
-            string file_path = "//" + username + ".xml";
+            
+            string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+            string file_path = username + ".xml";
             string full_filepath = Path.Combine(dir_path, file_path);
+
             //valid username
             if (File.Exists(full_filepath))
             {
-                Player searched = Player.retrievePlayer(file_path);
+                Player searched = Player.retrievePlayer(username);
 
                 //valid password
                 if (password == searched.password)
                 {
-                    MessageBox.Show("Successful Login");
+                    if (!new_user)
+                    {
+                        MessageBox.Show("Successful Login");
+                    }
                     return true;
+                    this.Hide();
                 }
 
                 //invalid password
@@ -78,25 +83,31 @@ namespace Beatmap_Guesser
                 }
 
             }
-            //no valid file, prompt user to create new account
-            DialogResult dialogResult = MessageBox.Show("The specified user does not currently exist. Would you like to create a new user?", 
-                "New User Confirmation", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
+            else //no valid file, prompt user to create new account
             {
-                //create and save new user
-                Player p = new Player(username);
-                p.password = password;
-                p.savePlayer();
-
-                MessageBox.Show("Successfully created new user with username " + username +".");
-
-                return true;
+                   DialogResult dialogResult = MessageBox.Show("The specified user does not currently exist. Would you like to create a new user?",
+                        "New User Confirmation", MessageBoxButtons.YesNo);//figure out a way to stop this from generating twice
+                
+                if (dialogResult == DialogResult.Yes)
+                {
+                    //create and save new user
+                    Player p = new Player(username);
+                    p.password = password;
+                    p.savePlayer();
+                    new_user = true;//flag to not show login verification twice
+                    MessageBox.Show("Successfully created new user with username " + username + ".");
+                    this.Hide();
+                    return true;
+                }
+                else
+                {
+                    
+                    this.Hide();
+                    return false;
+                }
+            
             }
-            else if (dialogResult == DialogResult.No)
-            {
-                return false;
-            }
+
             return false;
         }
 
