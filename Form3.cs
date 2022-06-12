@@ -14,8 +14,9 @@ namespace Beatmap_Guesser
     public partial class LoginForm : Form
     {
 
-        private string username;
-        private string password;    
+        public string username;
+        private string password;
+        public Player logged_in_player { get; set; } = null;
 
         public LoginForm()
         {
@@ -37,8 +38,9 @@ namespace Beatmap_Guesser
 
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
+
         {
-            username = UsernameBox.Text;
+                username = UsernameBox.Text;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -54,60 +56,89 @@ namespace Beatmap_Guesser
    
         public bool verifyLogin()
         {
-            
-            string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
-            string file_path = username + ".xml";
-            string full_filepath = Path.Combine(dir_path, file_path);
-
-            //valid username
-            if (File.Exists(full_filepath))
+            bool valid_user = false;
+            bool valid_pass = false;
+            if (username == null || password == null) return false;
+            if (username == "Guest")
             {
-                Player searched = Player.retrievePlayer(username);
+                MessageBox.Show("Cannot select \"Guest\" as a username! Please choose another.");
+            }
+            else if (username.Length < 3)
+            {
+                MessageBox.Show("Usernames must be at least three characters long.");
+            }
+            else if (password.Length < 5)
+            {
+                MessageBox.Show("Passwords must be at least five characters long.");
+            }
+            else
+            {
+                valid_user = true;
+                valid_pass = true;
+            }
 
-                //valid password
-                if (password == searched.password)
+            if (valid_user && valid_pass)//if the username and passwords are of an acceptable length, verify them
+            { 
+                string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+                string file_path = username + ".xml";
+                string full_filepath = Path.Combine(dir_path, file_path);
+
+                //valid username
+                if (File.Exists(full_filepath))
                 {
-                    if (!new_user)
+                    Player searched = Player.retrievePlayer(username);
+
+                    //valid password
+                    if (password == searched.password)
                     {
-                        MessageBox.Show("Successful Login");
+                        if (!new_user)
+                        {
+                            MessageBox.Show("Successful Login");
+                            this.logged_in_player = searched;
+                        }
+                        return true;
+                        this.Hide();
                     }
-                    return true;
-                    this.Hide();
-                }
 
-                //invalid password
-                else
+                    //invalid password
+                    else
+                    {
+                        MessageBox.Show("Incorrect Password");
+                        return false;
+                    }
+
+                }
+                else //no valid file, prompt user to create new account
                 {
-                    MessageBox.Show("Incorrect Password");
-                    return false;
-                }
+                    if (!this.Visible)
+                    {
+                        return false;//stops dialogueResult from generating twice
+                    }
+                    DialogResult dialogResult = MessageBox.Show("The specified user does not currently exist. Would you like to create a new user?",
+                         "New User Confirmation", MessageBoxButtons.YesNo);
 
+                    if (dialogResult == DialogResult.No)
+                    {
+                        
+                        this.Hide();
+                        return false;
+                    }
+                    else 
+                    {
+                        //create and save new user
+                        Player p = new Player(username);
+                        p.password = password;
+                        p.savePlayer();
+                        new_user = true;//flag to not show login verification twice
+                        MessageBox.Show("Successfully created new user with username " + username + ".");
+                        this.logged_in_player = p;
+                        this.Hide();
+                        return true;
+
+                    }
+
+                }
             }
-            else //no valid file, prompt user to create new account
-            {
-                   DialogResult dialogResult = MessageBox.Show("The specified user does not currently exist. Would you like to create a new user?",
-                        "New User Confirmation", MessageBoxButtons.YesNo);//figure out a way to stop this from generating twice
-                
-                if (dialogResult == DialogResult.Yes)
-                {
-                    //create and save new user
-                    Player p = new Player(username);
-                    p.password = password;
-                    p.savePlayer();
-                    new_user = true;//flag to not show login verification twice
-                    MessageBox.Show("Successfully created new user with username " + username + ".");
-                    this.Hide();
-                    return true;
-                }
-                else
-                {
-                    
-                    this.Hide();
-                    return false;
-                }
-            
-            }
-
             return false;
         }
 
