@@ -18,16 +18,16 @@ namespace Beatmap_Guesser
         public HomeScreen()
         {
             InitializeComponent();
-
+            Shown += Form3_Show1;
         }
 
         private void Form3_Load(object sender, EventArgs e)
         {
-
+            
         }
         private void Form3_Show1(object sender, EventArgs e)
         {
-
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -39,14 +39,19 @@ namespace Beatmap_Guesser
             }
             else
             {
-                //show username and password form
-                //login
-                Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
-                gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
-                this.Hide();
-                gameDisplay.start();
-                this.Close();
-               
+                LoginForm loginForm = new LoginForm();
+                loginForm.ShowDialog();
+                bool login_response = loginForm.verifyLogin();
+
+                if (login_response)//successful login
+                {
+                    player = loginForm.logged_in_player;
+                    Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
+                    gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
+                    //this.Hide();
+                    gameDisplay.start();
+                    //this.Close();
+                }
             }
         }
         private void button2_Click(object sender, EventArgs e)
@@ -60,9 +65,9 @@ namespace Beatmap_Guesser
             {
                 Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
                 gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
-                this.Hide();
+                //this.Hide();
                 gameDisplay.start();
-                this.Close();
+                //this.Close();
 
             }
 
@@ -71,6 +76,20 @@ namespace Beatmap_Guesser
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        public void showHelp()
+        {
+            MessageBox.Show("Hi! Welcome to the osu! Beatmap Guesser, a game where you guess the beatmap based on the provided background!"
+               + "\n\nThere are two ways to begin play - Login and Play As Guest. Login requires a username and password combination, " +
+               "and allows you to save and view statistics for all games you've played previously."
+               + "\n\nTo start, please select a difficulty, and choose whether you would like to Play As Guest or Login."
+               + "\n\nIf you would like to see these instructions again, click the Help button!");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            showHelp();
         }
     }
 }

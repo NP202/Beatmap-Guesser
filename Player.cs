@@ -15,7 +15,7 @@ namespace Beatmap_Guesser
 		private string Name { get; set; }
 		public int TotalGuessed { get; set; }
 		public int CorrectlyGuessed { get; set; }
-
+		public string password { get; set; }	
 
 		public Player()
 		{
@@ -30,15 +30,14 @@ namespace Beatmap_Guesser
 			this.CorrectlyGuessed = 0;
 		}
 
-		public Player retrievePlayer(string name)
+		public static Player retrievePlayer(string name)
 		{
 
 			System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Player));
-			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "//osu! Beatmap Guesser";
-			string file_path = "//" + name + ".xml";
-			string full_filepath = dir_path + file_path;
+			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+			string file_path = name + ".xml";
+			string full_filepath = Path.Combine(dir_path, file_path);
 
-			
             StreamReader file = new StreamReader(full_filepath);
 			Player returning_player = (Player)reader.Deserialize(file);
 			file.Close();
@@ -50,9 +49,9 @@ namespace Beatmap_Guesser
 		{
 	
 			System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Player));
-			string file_path = "//" + this.Name + ".xml";
-			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "//osu! Beatmap Guesser";
-			string full_filepath = dir_path + file_path;
+			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+			string file_path = this.Name + ".xml";
+			string full_filepath = Path.Combine(dir_path, file_path);
 
 			if (Directory.Exists(dir_path)){//path already exists, only create file
 
