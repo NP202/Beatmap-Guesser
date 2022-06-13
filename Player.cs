@@ -12,7 +12,7 @@ namespace Beatmap_Guesser
 	[Serializable()]
 	public class Player
 	{
-		private string Name { get; set; }
+		public string Name { get; set; }
 		public int TotalGuessed { get; set; }
 		public int CorrectlyGuessed { get; set; }
 		public string password { get; set; }	
@@ -34,7 +34,7 @@ namespace Beatmap_Guesser
 		{
 
 			System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Player));
-			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser\\userdata";
 			string file_path = name + ".xml";
 			string full_filepath = Path.Combine(dir_path, file_path);
 
@@ -49,7 +49,7 @@ namespace Beatmap_Guesser
 		{
 	
 			System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Player));
-			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+			var dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser\\userdata";
 			string file_path = this.Name + ".xml";
 			string full_filepath = Path.Combine(dir_path, file_path);
 

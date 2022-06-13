@@ -104,7 +104,6 @@ namespace Beatmap_Guesser
             textBox2.Text = "Selected image: " + currentSong.imagePath;
         }
 
-
         private void renderImageEasy()
         {
 
@@ -174,7 +173,8 @@ namespace Beatmap_Guesser
                 HomeScreen hs = new HomeScreen();
                 player.TotalGuessed += this.totalCount;
                 player.CorrectlyGuessed += this.correctCount;
-                MessageBox.Show("You answered " + player.CorrectlyGuessed + " correct out of " + player.TotalGuessed);
+                MessageBox.Show("You answered " + this.correctCount + " correct out of " + this.totalCount);
+                player.savePlayer();
                 this.Hide();
                 hs.ShowDialog();
                 this.Close();
@@ -216,10 +216,8 @@ namespace Beatmap_Guesser
 
                     this.ShowDialog();
 
-                    while (true)//necessary for form to stay open
-                    {
+                while (true) { }//necessary for form to stay open
 
-                    }
                 }
             }
 

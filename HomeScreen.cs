@@ -83,13 +83,45 @@ namespace Beatmap_Guesser
             MessageBox.Show("Hi! Welcome to the osu! Beatmap Guesser, a game where you guess the beatmap based on the provided background!"
                + "\n\nThere are two ways to begin play - Login and Play As Guest. Login requires a username and password combination, " +
                "and allows you to save and view statistics for all games you've played previously."
-               + "\n\nTo start, please select a difficulty, and choose whether you would like to Play As Guest or Login."
+               + "\n\nTo start, please select a difficulty, how many songs you would like per-round, and choose whether you would like to Play As Guest or Login."
                + "\n\nIf you would like to see these instructions again, click the Help button!");
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             showHelp();
+        }
+
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            SongHandler.MAX_SONGS = (int)songCounter.Value;
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            if (player != null)
+            {
+                int correct_lifetime = this.player.CorrectlyGuessed;
+                int total_lifetime = this.player.TotalGuessed;
+                double guess_percent;
+
+                if (total_lifetime != 0)
+                {
+                    guess_percent = (double)correct_lifetime / total_lifetime * 100;
+                }
+                else
+                {
+                    guess_percent = 0;
+                }
+
+                MessageBox.Show("Statistics for " + player.Name + ".\n" + "===================================\n\n" + "Total Songs Guessed Correctly: " + correct_lifetime + "\n\n" +
+                    "Total Songs Shown: " + total_lifetime + "\n\n" + "Overall Guess Percent: " + guess_percent + "%");
+            }
+            else
+            {
+                MessageBox.Show("You are not logged in!");
+            }
         }
     }
 }

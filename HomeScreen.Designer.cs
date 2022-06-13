@@ -35,7 +35,10 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.HelpButton = new System.Windows.Forms.Button();
+            this.songCounter = new System.Windows.Forms.NumericUpDown();
+            this.statisticsButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.songCounter)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -94,6 +97,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.statisticsButton);
+            this.panel1.Controls.Add(this.songCounter);
             this.panel1.Controls.Add(this.HelpButton);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.button2);
@@ -106,13 +111,49 @@
             // HelpButton
             // 
             this.HelpButton.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.HelpButton.Location = new System.Drawing.Point(1019, 0);
+            this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.HelpButton.Location = new System.Drawing.Point(1011, 0);
             this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(42, 22);
+            this.HelpButton.Size = new System.Drawing.Size(50, 30);
             this.HelpButton.TabIndex = 5;
             this.HelpButton.Text = "Help";
             this.HelpButton.UseVisualStyleBackColor = false;
             this.HelpButton.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // songCounter
+            // 
+            this.songCounter.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.songCounter.Location = new System.Drawing.Point(422, 358);
+            this.songCounter.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.songCounter.Name = "songCounter";
+            this.songCounter.Size = new System.Drawing.Size(120, 20);
+            this.songCounter.TabIndex = 8;
+            this.songCounter.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.songCounter.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // statisticsButton
+            // 
+            this.statisticsButton.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.statisticsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.statisticsButton.Location = new System.Drawing.Point(944, 52);
+            this.statisticsButton.Name = "statisticsButton";
+            this.statisticsButton.Size = new System.Drawing.Size(117, 34);
+            this.statisticsButton.TabIndex = 9;
+            this.statisticsButton.Text = "Show Statistics";
+            this.statisticsButton.UseVisualStyleBackColor = false;
+            this.statisticsButton.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // HomeScreen
             // 
@@ -125,9 +166,10 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.DoubleBuffered = true;
             this.Name = "HomeScreen";
-            this.Text = "Form3";
+            this.Text = "osu! Beatmap Background Guesser";
             this.Load += new System.EventHandler(this.Form3_Load);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.songCounter)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -141,5 +183,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button HelpButton;
+        private System.Windows.Forms.NumericUpDown songCounter;
+        private System.Windows.Forms.Button statisticsButton;
     }
 }

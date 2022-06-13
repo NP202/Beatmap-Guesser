@@ -5,8 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using System.Windows.Forms;
 
 namespace Beatmap_Guesser
@@ -79,7 +81,7 @@ namespace Beatmap_Guesser
 
             if (valid_user && valid_pass)//if the username and passwords are of an acceptable length, verify them
             { 
-                string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser";
+                string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser\\userdata";
                 string file_path = username + ".xml";
                 string full_filepath = Path.Combine(dir_path, file_path);
 
@@ -88,16 +90,23 @@ namespace Beatmap_Guesser
                 {
                     Player searched = Player.retrievePlayer(username);
 
+                    //password should already be hashed before the user is written into an xml file
+                    bool match = Crypto.VerifyHashedPassword(searched.password, password);
+
                     //valid password
-                    if (password == searched.password)
+                    if (match)
                     {
+                        bool message_shown = false;
                         if (!new_user)
                         {
                             MessageBox.Show("Successful Login");
                             this.logged_in_player = searched;
+                            this.Hide();
+                            message_shown = true;
+
                         }
                         return true;
-                        this.Hide();
+                        
                     }
 
                     //invalid password
@@ -127,7 +136,7 @@ namespace Beatmap_Guesser
                     {
                         //create and save new user
                         Player p = new Player(username);
-                        p.password = password;
+                        p.password = Crypto.HashPassword(password);//password saved as hash
                         p.savePlayer();
                         new_user = true;//flag to not show login verification twice
                         MessageBox.Show("Successfully created new user with username " + username + ".");
@@ -144,7 +153,7 @@ namespace Beatmap_Guesser
 
         private void label1_Click_1(object sender, EventArgs e)
         {
-
+            
         }
     }
 }
