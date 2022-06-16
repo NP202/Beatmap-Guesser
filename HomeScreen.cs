@@ -15,6 +15,7 @@ namespace Beatmap_Guesser
 
         public GameDisplay gameDisplay;
         public Player player;
+        public static bool first_game_flag = true;
         public HomeScreen()
         {
             InitializeComponent();
