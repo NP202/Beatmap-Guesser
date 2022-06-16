@@ -59,11 +59,11 @@
             // pictureBox1
             // 
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox1.BackColor = System.Drawing.Color.RosyBrown;
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(63, 43);
             this.pictureBox1.MaximumSize = new System.Drawing.Size(1200, 600);
-            this.pictureBox1.MinimumSize = new System.Drawing.Size(256, 256);
+            this.pictureBox1.MinimumSize = new System.Drawing.Size(1, 1);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Padding = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Size = new System.Drawing.Size(1200, 600);

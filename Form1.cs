@@ -75,23 +75,25 @@ namespace Beatmap_Guesser
         {
 
             Image image = this.currentSong.getImage();
-            if (image == null) image = SongHandler.getSafetyImage(SongHandler.current_path);//catch bad image, will still error if NO IMAGES IN SONG FOLDER
+            if (image == null) image = SongHandler.getSafetyImage(SongHandler.current_path);//catch bad image
+
             var bitmap = (Bitmap)image;
 
             int max_x = image.Size.Width;
-            int max_y = image.Size.Height;  
+            int max_y = image.Size.Height;
+
+            int cut_bound_x = (int)(max_x * .5);
+            int cut_bound_y = (int)(max_y * .5);
 
             Random r = new Random();
-            int random_x = r.Next(1, max_x - 256);
-            int random_y = r.Next(1, max_y - 256);
-            
-            Rectangle clone = new Rectangle(random_x, random_y, 256, 256);
+            int random_x = r.Next(1, max_x - cut_bound_x);//set cursor (top left of image), guaranteed to not be out of bounds
+            int random_y = r.Next(1, max_y - cut_bound_y);
+
+            Rectangle clone = new Rectangle(random_x, random_y, (int)(cut_bound_x * .5), (int)(cut_bound_y * .5));
 
             if (difficulty == "Normal")
             {
-                random_x = r.Next(1, max_x - 512);
-                random_y = r.Next(1, max_y - 512);
-                Rectangle new_clone = new Rectangle(random_x, random_y, 512, 512);
+                Rectangle new_clone = new Rectangle(random_x, random_y, cut_bound_x, cut_bound_y);
                 this.zoomedImage = bitmap.Clone(new_clone, PixelFormat.Format32bppRgb);
             }
 
@@ -102,6 +104,7 @@ namespace Beatmap_Guesser
             pictureBox1.Width = cloned_image.Width;
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             textBox2.Text = "Selected image: " + currentSong.imagePath;
+
         }
 
         private void renderImageEasy()
@@ -165,28 +168,27 @@ namespace Beatmap_Guesser
             currentSongIndex++;
             try
             {
+
+                if (this.difficulty == "Normal")
+                {
+                    ZoomButton.Visible = true;
+                }
+
+                answerBox.Clear();//resets guess text per-image
                 this.currentSong = (Song)this.songList[currentSongIndex];
             }
             catch (Exception ex)
             {
                 Console.WriteLine("The game has ended.");
                 HomeScreen hs = new HomeScreen();
-                player.TotalGuessed += this.totalCount;
-                player.CorrectlyGuessed += this.correctCount;
-                MessageBox.Show("You answered " + this.correctCount + " correct out of " + this.totalCount);
-                player.savePlayer();
+                //player.TotalGuessed += this.totalCount;
+                //player.CorrectlyGuessed += this.correctCount;
                 this.Hide();
                 hs.ShowDialog();
                 this.Close();
 
             }
             renderImage();
-
-            if (this.difficulty == "Normal")//re-enable button for each new image
-            {
-                ZoomButton.Enabled = true;
-                ZoomButton.Visible = true;
-            }
 
             this.Show();
 
