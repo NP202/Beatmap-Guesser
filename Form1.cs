@@ -212,25 +212,34 @@ namespace Beatmap_Guesser
         public void start()
         {
             //if (this.selectedPath != null && this.list_songpaths != null)
-            if (!HomeScreen.first_game_flag)
+
+            if (!HomeScreen.first_game_flag)//non-first game
                 {
                 this.generateSongs(selectedPath, list_songpaths);
-                Console.WriteLine("STOP SIGN");
                 }
-            else
+            else//first game
             {
-                Console.WriteLine("GO SIGN");
+
                 DialogResult result = this.filepathForm.getDialogResult();
-                string path = this.filepathForm.getFilePath();
-                string[] list_of_song_paths = Directory.GetDirectories(path);
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(path))
+
+                if (result == DialogResult.Cancel || result == DialogResult.Abort)
                 {
-                    selectedPath = path;
-                    list_songpaths = list_of_song_paths;
+                    start();
+                }
+
+                else if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(this.filepathForm.getFilePath()))//if properly selected, set static variables here
+                {
+
+                    selectedPath = this.filepathForm.getFilePath();
+                    list_songpaths = Directory.GetDirectories(selectedPath);
                     generateSongs(selectedPath, list_songpaths);
 
                 }
-
+                else
+                {
+                    MessageBox.Show("Uncaught DialogResult.");
+                }
+                
             }
 
             while (true)
@@ -242,13 +251,15 @@ namespace Beatmap_Guesser
         public void generateSongs(string path, string[] song_paths_list)
         {
 
-            MessageBox.Show("Your selected osu! Songs folder: " + path + "\n", "Message");
+            //catch the user failing to put in a value with the default
+
+            if (HomeScreen.first_game_flag) MessageBox.Show("Your selected osu! Songs folder: " + path + "\n", "Message");
             SongHandler sh = new SongHandler();
 
             this.songList = sh.createSongs(song_paths_list);
 
             MessageBox.Show("You've created " + songList.Count + " songs automatically!");
-
+            
             this.ShowDialog();
         }
 
