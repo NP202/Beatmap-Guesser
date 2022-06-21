@@ -34,9 +34,9 @@
             this.button2 = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.HelpButton = new System.Windows.Forms.Button();
-            this.songCounter = new System.Windows.Forms.NumericUpDown();
             this.statisticsButton = new System.Windows.Forms.Button();
+            this.songCounter = new System.Windows.Forms.NumericUpDown();
+            this.HelpButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.songCounter)).BeginInit();
             this.SuspendLayout();
@@ -108,41 +108,6 @@
             this.panel1.Size = new System.Drawing.Size(1061, 589);
             this.panel1.TabIndex = 4;
             // 
-            // HelpButton
-            // 
-            this.HelpButton.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.HelpButton.Location = new System.Drawing.Point(1011, 0);
-            this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(50, 30);
-            this.HelpButton.TabIndex = 5;
-            this.HelpButton.Text = "Help";
-            this.HelpButton.UseVisualStyleBackColor = false;
-            this.HelpButton.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // songCounter
-            // 
-            this.songCounter.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.songCounter.Location = new System.Drawing.Point(422, 358);
-            this.songCounter.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.songCounter.Name = "songCounter";
-            this.songCounter.Size = new System.Drawing.Size(120, 20);
-            this.songCounter.TabIndex = 8;
-            this.songCounter.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.songCounter.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
             // statisticsButton
             // 
             this.statisticsButton.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -154,6 +119,41 @@
             this.statisticsButton.Text = "Show Statistics";
             this.statisticsButton.UseVisualStyleBackColor = false;
             this.statisticsButton.Click += new System.EventHandler(this.button3_Click_1);
+            // 
+            // songCounter
+            // 
+            this.songCounter.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.songCounter.Location = new System.Drawing.Point(422, 358);
+            this.songCounter.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.songCounter.Name = "songCounter";
+            this.songCounter.Size = new System.Drawing.Size(120, 20);
+            this.songCounter.TabIndex = 8;
+            this.songCounter.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.songCounter.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // HelpButton
+            // 
+            this.HelpButton.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.HelpButton.Location = new System.Drawing.Point(1011, 0);
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(50, 30);
+            this.HelpButton.TabIndex = 5;
+            this.HelpButton.Text = "Help";
+            this.HelpButton.UseVisualStyleBackColor = false;
+            this.HelpButton.Click += new System.EventHandler(this.button3_Click);
             // 
             // HomeScreen
             // 

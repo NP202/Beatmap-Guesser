@@ -48,7 +48,6 @@
             this.answerBox.Name = "answerBox";
             this.answerBox.Size = new System.Drawing.Size(400, 19);
             this.answerBox.TabIndex = 1;
-            this.answerBox.Text = "Type your guess here!\r\n";
             this.answerBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // fileSystemWatcher1
@@ -63,7 +62,7 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(63, 43);
             this.pictureBox1.MaximumSize = new System.Drawing.Size(1200, 600);
-            this.pictureBox1.MinimumSize = new System.Drawing.Size(1, 1);
+            this.pictureBox1.MinimumSize = new System.Drawing.Size(2, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Padding = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Size = new System.Drawing.Size(1200, 600);

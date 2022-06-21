@@ -31,6 +31,9 @@ namespace Beatmap_Guesser
         public Player player { get; private set; }
         public Image zoomedImage { get; set; } = null;
 
+        public static string selectedPath { get; set; }
+        public static string[] list_songpaths { get; set; }
+
         public GameDisplay(string difficulty, Player player)
         {
 
@@ -157,6 +160,12 @@ namespace Beatmap_Guesser
         {
             
         }
+
+        public void showResults()
+        {
+            
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             this.currentGuess = answerBox.Text;
@@ -179,6 +188,7 @@ namespace Beatmap_Guesser
             }
             catch (Exception ex)
             {
+                HomeScreen.first_game_flag = false;
                 Console.WriteLine("The game has ended.");
                 HomeScreen hs = new HomeScreen();
                 //player.TotalGuessed += this.totalCount;
@@ -201,37 +211,69 @@ namespace Beatmap_Guesser
 
         public void start()
         {
+            //if (this.selectedPath != null && this.list_songpaths != null)
+
+            if (!HomeScreen.first_game_flag)//non-first game
+                {
+                this.generateSongs(selectedPath, list_songpaths);
+                }
+            else//first game
+            {
 
                 DialogResult result = this.filepathForm.getDialogResult();
-                var selectedPath = this.filepathForm.getFilePath();
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(selectedPath))
+                if (result == DialogResult.Cancel || result == DialogResult.Abort)
+                {
+                    start();
+                }
+
+                else if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(this.filepathForm.getFilePath()))//if properly selected, set static variables here
                 {
 
-                    string[] list_of_song_paths = Directory.GetDirectories(selectedPath);
-                    MessageBox.Show("Your selected osu! Songs folder: " + selectedPath + "\n", "Message");
-                    SongHandler sh = new SongHandler();
-
-                    this.songList = sh.createSongs(list_of_song_paths);
-
-                    MessageBox.Show("You've created " + songList.Count + " songs automatically!");
-
-                    this.ShowDialog();
-
-                while (true) { }//necessary for form to stay open
+                    selectedPath = this.filepathForm.getFilePath();
+                    list_songpaths = Directory.GetDirectories(selectedPath);
+                    generateSongs(selectedPath, list_songpaths);
 
                 }
+                else
+                {
+                    MessageBox.Show("Uncaught DialogResult.");
+                }
+                
             }
 
+            while (true)
+            { //necessary for form to stay open
+
+            }
+        }
+
+        public void generateSongs(string path, string[] song_paths_list)
+        {
+
+            //catch the user failing to put in a value with the default
+
+            if (HomeScreen.first_game_flag) MessageBox.Show("Your selected osu! Songs folder: " + path + "\n", "Message");
+            SongHandler sh = new SongHandler();
+
+            this.songList = sh.createSongs(song_paths_list);
+
+            MessageBox.Show("You've created " + songList.Count + " songs automatically!");
+            
+            this.ShowDialog();
+        }
 
         public bool validateGuess(Song currentSong, string guess)
         {
 
             this.guessMessage = "Error during guess validation.";
-
+            int correctLength = currentSong.song_name.Length;
             int guessDistance = GetStringDistance(currentSong.song_name, guess);
+            int correctBound = (int)(correctLength / 4);
+
+
             this.totalCount++;
-            if (guessDistance >= 0 && guessDistance <= 5)
+            if (guessDistance >= 0 && guessDistance <= correctBound)
             {
                 if (guessDistance == 0)
                 {
