@@ -55,24 +55,19 @@ namespace Beatmap_Guesser
             verifyLogin();
         }
         bool new_user = false;
-   
+        bool message_shown = false;
         public bool verifyLogin()
         {
             bool valid_user = false;
             bool valid_pass = false;
             if (username == null || password == null) return false;
-            if (username == "Guest")
-            {
-                MessageBox.Show("Cannot select \"Guest\" as a username! Please choose another.");
-            }
-            else if (username.Length < 3)
-            {
-                MessageBox.Show("Usernames must be at least three characters long.");
-            }
-            else if (password.Length < 5)
-            {
-                MessageBox.Show("Passwords must be at least five characters long.");
-            }
+
+            if (username == "Guest") MessageBox.Show("Cannot select \"Guest\" as a username! Please choose another.");
+
+            else if (username.Length < 3) MessageBox.Show("Usernames must be at least three characters long.");
+   
+            else if (password.Length < 5) MessageBox.Show("Passwords must be at least five characters long.");
+         
             else
             {
                 valid_user = true;
@@ -84,6 +79,7 @@ namespace Beatmap_Guesser
                 string dir_path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\osu! Beatmap Guesser\\userdata";
                 string file_path = username + ".xml";
                 string full_filepath = Path.Combine(dir_path, file_path);
+                
 
                 //valid username
                 if (File.Exists(full_filepath))
@@ -92,33 +88,35 @@ namespace Beatmap_Guesser
 
                     //password should already be hashed before the user is written into an xml file
                     bool match = Crypto.VerifyHashedPassword(searched.password, password);
-
-                    //valid password
-                    if (match)
-                    {
-                        bool message_shown = false;
-                        if (!new_user)
+                
+                        //valid password
+                        if (match)
                         {
-                            MessageBox.Show("Successful Login");
-                            this.logged_in_player = searched;
-                            this.Hide();
-                            message_shown = true;
+                            
+                            if (!new_user)
+                            {
+                                if (!message_shown) MessageBox.Show("Successful Login");
+                                message_shown = true;
+                                this.logged_in_player = searched;
+                                this.Hide();
+                       
+                            }
+                            return true;
 
                         }
-                        return true;
-                        
-                    }
 
-                    //invalid password
-                    else
-                    {
-                        MessageBox.Show("Incorrect Password");
-                        return false;
-                    }
-
+                        //invalid password
+                        else
+                        {
+                            MessageBox.Show("Incorrect Password");
+                            message_shown = true;
+                            return false;
+                        }
+                    
                 }
                 else //no valid file, prompt user to create new account
                 {
+                    
                     if (!this.Visible)
                     {
                         return false;//stops dialogueResult from generating twice
@@ -128,7 +126,6 @@ namespace Beatmap_Guesser
 
                     if (dialogResult == DialogResult.No)
                     {
-                        
                         this.Hide();
                         return false;
                     }
@@ -139,7 +136,8 @@ namespace Beatmap_Guesser
                         p.password = Crypto.HashPassword(password);//password saved as hash
                         p.savePlayer();
                         new_user = true;//flag to not show login verification twice
-                        MessageBox.Show("Successfully created new user with username " + username + ".");
+                        if (!message_shown) MessageBox.Show("Successfully created new user with username " + username + ".");
+                        message_shown = true;
                         this.logged_in_player = p;
                         this.Hide();
                         return true;

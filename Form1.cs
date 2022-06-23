@@ -161,6 +161,10 @@ namespace Beatmap_Guesser
             
         }
 
+        public void showResults()
+        {
+            
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
