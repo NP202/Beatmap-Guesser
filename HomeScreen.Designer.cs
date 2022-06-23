@@ -34,9 +34,10 @@
             this.button2 = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.HelpButton = new System.Windows.Forms.Button();
-            this.songCounter = new System.Windows.Forms.NumericUpDown();
+            this.button3 = new System.Windows.Forms.Button();
             this.statisticsButton = new System.Windows.Forms.Button();
+            this.songCounter = new System.Windows.Forms.NumericUpDown();
+            this.HelpButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.songCounter)).BeginInit();
             this.SuspendLayout();
@@ -44,6 +45,7 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.button1.Location = new System.Drawing.Point(421, 189);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(238, 52);
@@ -70,6 +72,7 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.button2.Location = new System.Drawing.Point(421, 247);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(238, 49);
@@ -97,6 +100,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.statisticsButton);
             this.panel1.Controls.Add(this.songCounter);
             this.panel1.Controls.Add(this.HelpButton);
@@ -108,7 +112,19 @@
             this.panel1.Size = new System.Drawing.Size(1061, 589);
             this.panel1.TabIndex = 4;
             // 
-            // HelpButton
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.button3.Location = new System.Drawing.Point(971, 105);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(90, 31);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "Log Out";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click_2);
+            // 
+            // statisticsButton
             // 
             this.HelpButton.BackColor = System.Drawing.Color.WhiteSmoke;
             this.HelpButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
@@ -185,5 +201,6 @@
         private System.Windows.Forms.Button HelpButton;
         private System.Windows.Forms.NumericUpDown songCounter;
         private System.Windows.Forms.Button statisticsButton;
+        private System.Windows.Forms.Button button3;
     }
 }

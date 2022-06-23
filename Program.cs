@@ -12,7 +12,8 @@ namespace Beatmap_Guesser {
         static void Main(string[] args)
         {
 
-            Application.Run(new HomeScreen());
+            // Application.Run(new HomeScreen());
+            Application.Run(ContainerForm.GetInstance());
         }
         
 

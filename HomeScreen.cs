@@ -14,7 +14,8 @@ namespace Beatmap_Guesser
     {
 
         public GameDisplay gameDisplay;
-        public Player player;
+       // public Player player;
+        public static bool first_game_flag = true;
         public HomeScreen()
         {
             InitializeComponent();
@@ -27,7 +28,7 @@ namespace Beatmap_Guesser
         }
         private void Form3_Show1(object sender, EventArgs e)
         {
-            
+           
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,37 +38,63 @@ namespace Beatmap_Guesser
             {
                 MessageBox.Show("No difficulty selected! Please select a difficulty and try again.");
             }
-            else
+            else // difficulty selected, login flow
             {
+
+                if (GameDisplay.player != null && GameDisplay.player.Name != "Guest")//player has already logged in before and is currently logged-in
+                {
+                    //no need to set player again - stay logged in to previous user
+                    Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
+                    gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
+
+                    ContainerForm cf = ContainerForm.GetInstance();
+
+                    cf.AddFormAndShow(gameDisplay);
+
+                    this.Close();
+
+                }
+                else 
+                { 
                 LoginForm loginForm = new LoginForm();
                 loginForm.ShowDialog();
                 bool login_response = loginForm.verifyLogin();
 
-                if (login_response)//successful login
-                {
-                    player = loginForm.logged_in_player;
-                    Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
-                    gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
-                    //this.Hide();
-                    gameDisplay.start();
-                    //this.Close();
+                    if (login_response)//successful login
+                    {
+
+                        GameDisplay.player = loginForm.logged_in_player;
+                        Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
+                        gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
+                        ContainerForm cf = ContainerForm.GetInstance();
+
+                        cf.AddFormAndShow(gameDisplay);
+
+
+                        this.Close();
+
+                    }
                 }
             }
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            player = new Player("Guest");
+
             if (comboBox1.SelectedItem == null)
             {
                 MessageBox.Show("No difficulty selected! Please select a difficulty and try again.");
             }
             else
             {
+                GameDisplay.player = new Player("Guest");
                 Console.WriteLine("Selected Difficulty: " + comboBox1.SelectedItem.ToString());
-                gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString(), player);
-                //this.Hide();
-                gameDisplay.start();
-                //this.Close();
+                gameDisplay = new GameDisplay(comboBox1.SelectedItem.ToString());
+
+                ContainerForm cf = ContainerForm.GetInstance();
+
+                cf.AddFormAndShow(gameDisplay);
+
+                this.Close();
 
             }
 
@@ -92,7 +119,6 @@ namespace Beatmap_Guesser
             showHelp();
         }
 
-
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             SongHandler.MAX_SONGS = (int)songCounter.Value;
@@ -100,13 +126,13 @@ namespace Beatmap_Guesser
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            if (player != null)
+            if (GameDisplay.player != null && GameDisplay.player.Name != "Guest")
             {
-                int correct_lifetime = this.player.CorrectlyGuessed;
-                int total_lifetime = this.player.TotalGuessed;
+                int correct_lifetime = GameDisplay.player.CorrectlyGuessed;
+                int total_lifetime = GameDisplay.player.TotalGuessed;
                 double guess_percent;
 
-                if (total_lifetime != 0)
+                    if (total_lifetime != 0)
                 {
                     guess_percent = (double)correct_lifetime / total_lifetime * 100;
                 }
@@ -115,13 +141,28 @@ namespace Beatmap_Guesser
                     guess_percent = 0;
                 }
 
-                MessageBox.Show("Statistics for " + player.Name + ".\n" + "===================================\n\n" + "Total Songs Guessed Correctly: " + correct_lifetime + "\n\n" +
+                MessageBox.Show("Statistics for " + GameDisplay.player.Name + ".\n" + "===================================\n\n" + "Total Songs Guessed Correctly: " + correct_lifetime + "\n\n" +
                     "Total Songs Shown: " + total_lifetime + "\n\n" + "Overall Guess Percent: " + guess_percent + "%");
             }
             else
             {
                 MessageBox.Show("You are not logged in!");
             }
+        }
+
+        private void button3_Click_2(object sender, EventArgs e)
+        {
+
+            if (GameDisplay.player != null && GameDisplay.player.Name != "Guest")
+            {
+                GameDisplay.player = null;
+                MessageBox.Show("Successfully logged out.");
+            }
+            else
+            {
+                MessageBox.Show("You are already logged out!");
+            }
+
         }
     }
 }
