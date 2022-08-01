@@ -121,9 +121,11 @@
             this.Controls.Add(this.answerButton);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.answerBox);
+            this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GameDisplay";
-            this.Text = "Beatmap Guesser";
+            this.Text = "osu! Beatmap Background Guesser";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

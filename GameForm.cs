@@ -1,24 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Collections;
 using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 
 namespace Beatmap_Guesser
 {
     public partial class GameDisplay : Form
     {
+        /** Main form of the application. The GameDisplay class handles all game logic, as well as guess validation and image display. 
+         * The class can be initialized with one of three difficulties - Easy, Normal, Hard. These change the proportions of the image that is shown, 
+         * from full, to 50% of the original image, with and without an additional "zoom out" option respectively. 
+         * The class is also double-buffered to minimize graphical errors that the user may potentially see while attempting to display an image.
+         */
+
         public string currentGuess { get; private set; }
         public string guessMessage { get; private set; }
-        public Song currentSong { get;  set; }
+        public Song currentSong { get; set; }
         public int correctCount { get; private set; }
         public int totalCount { get; private set; }
         public ArrayList songList { get; private set; }
@@ -36,17 +38,19 @@ namespace Beatmap_Guesser
 
         public GameDisplay(string difficulty)
         {
-
+            this.DoubleBuffered = true;
             InitializeComponent();
             this.difficulty = difficulty;
 
             Load += Form1_Load1;
             Shown += Form1_Shown1;
-          
+
         }
 
         private void Form1_Load1(object sender, EventArgs e)
         {
+            /**Auto-generated form load method. All relevant objects are added to the Controls collection, and the next image is rendered.
+             */
 
             this.currentSong = (Song)this.songList[0];//may be null
 
@@ -62,7 +66,7 @@ namespace Beatmap_Guesser
             else
             {
                 Song newCurrent = (Song)this.songList[this.songList.IndexOf(this.currentSong) + 1];
-                this.currentSong = newCurrent;//skip current image, render next THIS DOES NOT CHANGE THE DATA DISPLAYED
+                this.currentSong = newCurrent;//skip current image, render next
 
                 renderImage();//render new image
             }
@@ -76,6 +80,9 @@ namespace Beatmap_Guesser
         }
         public void renderImageSplice()
         {
+            /** Randomly partitions the current Song's image so that only a portion of it is displayed to the user on Normal and Hard modes. 
+             * The unmodified image is also stored as a class variable to be displayed with the clicking of the "Zoom" button on Normal Mode.
+             */
 
             Image image = this.currentSong.getImage();
             if (image == null) image = SongHandler.getSafetyImage(SongHandler.current_path);//catch bad image
@@ -112,12 +119,14 @@ namespace Beatmap_Guesser
 
         private void renderImageEasy()
         {
+            /** Standard image rendering, showing the entire Song image to the user.
+             */
 
             Image image = null;
 
             image = this.currentSong.getImage();
-            
-            if (image == null) image = SongHandler.getSafetyImage(SongHandler.current_path);//catch bad image, will still error if NO IMAGES IN SONG FOLDER
+
+            if (image == null) image = SongHandler.getSafetyImage(SongHandler.current_path);//catch bad image
 
             pictureBox1.Image = image;
             pictureBox1.Height = image.Height;
@@ -138,36 +147,40 @@ namespace Beatmap_Guesser
             }
             else
             {
-                MessageBox.Show("Error during image generation - invalid difficulty");
-                
+                MessageBox.Show("Error during image generation - invalid difficulty.");
+
             }
         }
 
         private void Form1_Shown1(object sender, EventArgs e)
         {
-           
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-       
-            
+
+
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         public void showResults()
         {
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            /** Handles guess validation on submission and displays the result to the user, 
+             * before refreshing the display to the next image to be shown.
+             */
+
             this.currentGuess = answerBox.Text;
             this.buttonFlag = true;
 
@@ -212,10 +225,12 @@ namespace Beatmap_Guesser
 
         public void start()
         {
-            //if (this.selectedPath != null && this.list_songpaths != null)
-
-            if (!HomeScreen.first_game_flag)//non-first game
-                {
+            /** Starts the game, first prompting the user to select their osu! Songs folder path with a new FilepathForm. 
+             * The selected path is statically stored so the user does not have to re-select it every time they play.
+             */
+             
+            if (!HomeScreen.first_game_flag) //secondary game
+            {
                 this.generateSongs(selectedPath, list_songpaths);
 
                 FormCollection collection = Application.OpenForms;
@@ -223,22 +238,22 @@ namespace Beatmap_Guesser
                 IEnumerable<HomeScreen> ie = collection.OfType<HomeScreen>();
                 List<HomeScreen> list = ie.ToList();
 
-                foreach (HomeScreen screen in list) screen.Dispose();
+                foreach (HomeScreen screen in list) screen.Dispose(); //Dispose of all unattended HomeScreen forms, so they do not clutter the application window. 
 
                 this.ShowDialog();
 
             }
-            else//first game
+            else //first game
             {
 
                 DialogResult result = this.filepathForm.getDialogResult();
 
-                if (result == DialogResult.Cancel || result == DialogResult.Abort)
+                if (result == DialogResult.Cancel || result == DialogResult.Abort) //disallow the user from not selecting a folder
                 {
                     start();
                 }
 
-                else if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(this.filepathForm.getFilePath()))//if properly selected, set static variables here
+                else if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(this.filepathForm.getFilePath())) //if properly selected, set static variables here
                 {
 
                     selectedPath = this.filepathForm.getFilePath();
@@ -259,13 +274,9 @@ namespace Beatmap_Guesser
                 {
                     MessageBox.Show("Uncaught DialogResult.");
                 }
-                
-            }
-/*
-            while (true)
-            { //necessary for form to stay open
 
-            }*/
+            }
+
         }
 
         public void generateSongs(string path, string[] song_paths_list)
@@ -274,16 +285,20 @@ namespace Beatmap_Guesser
             //catch the user failing to put in a value with the default
 
             if (HomeScreen.first_game_flag) MessageBox.Show("Your selected osu! Songs folder: " + path + "\n", "Message");
+
             SongHandler sh = new SongHandler();
 
             this.songList = sh.createSongs(song_paths_list);
 
             MessageBox.Show("You've created " + songList.Count + " songs automatically!");
-            
+
         }
 
         public bool validateGuess(Song currentSong, string guess)
         {
+            /**Validates the user's guess by calculating the String Distance from the guess to the correct answer. 
+             * Results are then displayed depending on how close the user was to the correct answer.
+             */
 
             this.guessMessage = "Error during guess validation.";
             int correctLength = currentSong.song_name.Length;
@@ -311,11 +326,20 @@ namespace Beatmap_Guesser
                 this.guessMessage = "Not quite! The correct answer was " + currentSong.song_name + ".";
                 return false;
             }
-            
+
         }
 
         public static int GetStringDistance(string s, string t)
         {
+
+            /** Given two strings, returns the number of "steps" required to transform one string into the other. 
+             * This is calculated as a cost which is incremented for each necessary character swap, insertion, deletion, or transposition.
+             * 
+             * params:
+             * s - string whose distance from t is to be calculated 
+             * t - second string used in distance calculation
+             */
+
             string s_lower = s.ToLower();
             string t_lower = t.ToLower();
 
@@ -351,7 +375,9 @@ namespace Beatmap_Guesser
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-         
+            /** Sets the current image to the zoomed Image once the button is clicked on Normal mode.
+            */
+
             pictureBox1.Image = this.zoomedImage;
             pictureBox1.Height = this.zoomedImage.Height;
             pictureBox1.Width = this.zoomedImage.Width;

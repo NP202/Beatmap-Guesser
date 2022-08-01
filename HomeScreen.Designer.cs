@@ -181,6 +181,8 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HomeScreen";
             this.Text = "osu! Beatmap Background Guesser";
             this.Load += new System.EventHandler(this.Form3_Load);

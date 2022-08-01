@@ -41,7 +41,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1451, 668);
             this.Name = "FilepathForm";
-            this.Text = "Form2";
+            this.Text = "Songs Folder Selection";
             this.ResumeLayout(false);
 
         }
